@@ -115,7 +115,6 @@ export default async function AboutPage() {
                 knowledgeable, disciplined, respectful, and ready to make
                 their mark on the world.&rdquo;
               </blockquote>
-              <p className="mt-4 text-sm font-semibold text-navy-900">School Head</p>
             </div>
           </div>
         </Container>
