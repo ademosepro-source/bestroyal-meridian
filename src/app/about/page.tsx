@@ -99,14 +99,14 @@ export default async function AboutPage() {
             <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-full sm:h-48 sm:w-48">
               <Image
                 src="/images/about/head-teacher.jpg"
-                alt="Mrs Abosede Adepoju Adebowale, School Head Teacher"
+                alt="School Head"
                 fill
                 className="object-cover"
               />
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-600">
-                School Head&apos;s Address
+                Welcome to the Home of Greatness
               </p>
               <blockquote className="mt-4 text-base italic leading-relaxed text-slate-700">
                 &ldquo;Thank you all for making BestRoyal Meridian a true home
@@ -115,10 +115,7 @@ export default async function AboutPage() {
                 knowledgeable, disciplined, respectful, and ready to make
                 their mark on the world.&rdquo;
               </blockquote>
-              <p className="mt-4 text-sm font-semibold text-navy-900">
-                Mrs Abosede Adepoju Adebowale
-              </p>
-              <p className="text-sm text-slate-500">School Head Teacher</p>
+              <p className="mt-4 text-sm font-semibold text-navy-900">School Head</p>
             </div>
           </div>
         </Container>
