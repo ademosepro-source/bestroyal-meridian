@@ -8,8 +8,8 @@ values (
   'BestRoyal Meridian Nursery & Primary School',
   'Soaring for Excellence',
   'Alagbado, Lagos State',
-  'REPLACE ME — school phone number',
-  'REPLACE ME — school email address'
+  '+2348070911506',
+  'bestroyalmeridianschool@gmail.com'
 )
 on conflict (id) do nothing;
 
