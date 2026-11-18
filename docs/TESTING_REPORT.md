@@ -115,7 +115,8 @@ Run through this once `docs/SETUP.md` is complete. Check each box only
 after you've actually done it and seen the expected result — not before.
 
 - [ ] Super Administrator login
-- [ ] Create a staff account (teacher) and confirm the invite email arrives
+- [ ] Create a staff account (teacher), confirm the generated password is
+      shown, and sign in with it, confirming it forces a password change
 - [ ] Role-based access: confirm a teacher account cannot open `/dashboard/admin`
 - [ ] Register a student
 - [ ] Submit a public admission application, then convert it to an

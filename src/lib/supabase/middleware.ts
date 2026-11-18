@@ -51,6 +51,10 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
+    if (user.app_metadata?.must_change_password && pathname !== "/dashboard/change-password") {
+      return NextResponse.redirect(new URL("/dashboard/change-password", request.url));
+    }
+
     const role = user.app_metadata?.role as string | undefined;
     const matchedSection = Object.keys(ROLE_ACCESS).find((section) =>
       pathname.startsWith(section),

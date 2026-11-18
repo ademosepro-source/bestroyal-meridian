@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireRole } from "@/lib/auth/require-role";
+import { createUserWithPassword } from "@/lib/auth/create-user-with-password";
+import { setFlashPassword } from "@/lib/auth/flash-password";
 import type { ApplicationStatus } from "@/types/database";
 
 async function assertAdmissions() {
@@ -48,12 +50,13 @@ export async function convertApplicationToStudent(applicationId: string, desired
   if (existingProfile) {
     parentId = existingProfile.id;
   } else {
-    const { data: created, error: inviteError } = await admin.auth.admin.inviteUserByEmail(
-      application.parent_email,
-      { data: { full_name: application.parent_full_name, role: "parent" } },
-    );
-    if (!inviteError && created.user) {
-      parentId = created.user.id;
+    const created = await createUserWithPassword(admin, application.parent_email, {
+      full_name: application.parent_full_name,
+      role: "parent",
+    });
+    if (created.ok) {
+      parentId = created.userId;
+      await setFlashPassword(application.parent_email, created.password);
     }
   }
 

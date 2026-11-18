@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { createStaffAccount, type FormState } from "@/app/dashboard/admin/staff/actions";
 
 const inputClass =
@@ -11,6 +11,55 @@ const initialState: FormState = { error: null };
 
 export default function NewStaffPage() {
   const [state, formAction, pending] = useActionState(createStaffAccount, initialState);
+  const [copied, setCopied] = useState(false);
+
+  if (state.password) {
+    return (
+      <div className="max-w-2xl space-y-6">
+        <div>
+          <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-navy-900">
+            Account Created
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Share this temporary password with the staff member yourself — no email was sent (no
+            email provider is configured yet). They&apos;ll be required to set their own password
+            the first time they sign in.
+          </p>
+        </div>
+
+        <div className="space-y-4 rounded-2xl bg-white p-8 shadow-sm ring-1 ring-navy-900/5">
+          <div>
+            <p className={labelClass}>Email</p>
+            <p className="mt-1 text-sm text-slate-700">{state.email}</p>
+          </div>
+          <div>
+            <p className={labelClass}>Temporary Password</p>
+            <div className="mt-1.5 flex items-center gap-3">
+              <code className="rounded-lg bg-navy-50 px-3.5 py-2.5 text-sm font-semibold tracking-wide text-navy-900">
+                {state.password}
+              </code>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(state.password ?? "");
+                  setCopied(true);
+                }}
+                className="rounded-full border border-navy-900/15 px-4 py-2 text-xs font-semibold text-navy-800 hover:bg-navy-50"
+              >
+                {copied ? "Copied!" : "Copy"}
+              </button>
+            </div>
+          </div>
+          <a
+            href="/dashboard/admin/staff"
+            className="inline-flex rounded-full bg-gold-500 px-6 py-3 text-sm font-semibold text-navy-950 hover:bg-gold-400"
+          >
+            Back to Staff List
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -19,8 +68,9 @@ export default function NewStaffPage() {
           Add Staff Member
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          They&apos;ll receive an email invite to set their own password. A staff number is
-          generated automatically.
+          A password is generated automatically and shown to you to share with them — they&apos;ll
+          be required to change it the first time they sign in. A staff number is generated
+          automatically too.
         </p>
       </div>
 

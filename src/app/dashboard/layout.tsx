@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/auth/get-current-user";
 import { ROLE_LABELS } from "@/lib/auth/roles";
@@ -46,6 +47,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <div className="flex items-center gap-4">
           <NotificationBell notifications={notifications ?? []} />
           <span className="text-sm text-navy-800">{profile.full_name}</span>
+          <Link
+            href="/dashboard/change-password"
+            className="rounded-full border border-navy-900/15 px-4 py-2 text-xs font-semibold text-navy-800 hover:bg-navy-50"
+          >
+            Change Password
+          </Link>
           <form action={logout}>
             <button
               type="submit"

@@ -34,9 +34,11 @@ don't see.
 
 ### Staff (`Staff`)
 
-- **Add Staff Member** creates their account and emails them a link to
-  set their own password — you never need to tell anyone a password over
-  the phone. A staff number is generated automatically.
+- **Add Staff Member** creates their account and generates a temporary
+  password, shown to you on screen — share it with the staff member
+  yourself (phone, WhatsApp, in person). They'll be required to set their
+  own password the first time they sign in. A staff number is generated
+  automatically.
 - Choose their role carefully (Principal, Teacher, Bursar, Admissions
   Officer) — this controls exactly what they can see and do, and can't be
   changed from this screen afterward (ask a developer if a role needs to
@@ -197,9 +199,9 @@ they're published.
 
 ## Common questions
 
-**"I forgot my password."** There's no self-service reset yet — ask your
-Super Administrator to re-send an account invite, or contact the school
-office if you're a parent.
+**"I forgot my password."** There's no self-service reset or admin reset
+for an existing account yet — contact your developer, or (for a parent)
+the school office, to have it sorted out directly in Supabase.
 
 **"A number on a dashboard looks wrong."** Every figure in this system
 is calculated live from the underlying records (scores, payments,

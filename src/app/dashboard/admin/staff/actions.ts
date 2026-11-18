@@ -1,12 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireRole } from "@/lib/auth/require-role";
 import { staffSchema } from "@/lib/validations/staff";
+import { createUserWithPassword } from "@/lib/auth/create-user-with-password";
 
-export type FormState = { error: string | null };
+export type FormState = { error: string | null; password?: string; email?: string };
 
 export async function createStaffAccount(_prev: FormState, formData: FormData): Promise<FormState> {
   // Only the Super Administrator creates staff accounts (see role capability list).
@@ -27,24 +27,17 @@ export async function createStaffAccount(_prev: FormState, formData: FormData): 
 
   const admin = createAdminClient();
 
-  // Creates the account and emails the staff member an invite link to set
-  // their own password (requires SMTP/email to be configured in Supabase —
-  // see docs/SETUP.md).
-  const { data: created, error: createError } = await admin.auth.admin.inviteUserByEmail(
-    parsed.data.email,
-    { data: { full_name: parsed.data.full_name, role: parsed.data.role } },
-  );
+  const created = await createUserWithPassword(admin, parsed.data.email, {
+    full_name: parsed.data.full_name,
+    role: parsed.data.role,
+  });
 
-  if (createError || !created.user) {
-    return {
-      error: createError?.message.includes("already been registered")
-        ? "A user with this email already exists."
-        : "Could not create the account. Please try again.",
-    };
+  if (!created.ok) {
+    return { error: created.error };
   }
 
   const { error: staffError } = await admin.from("staff").insert({
-    id: created.user.id,
+    id: created.userId,
     position: parsed.data.position,
     department: parsed.data.department || null,
   });
@@ -54,9 +47,9 @@ export async function createStaffAccount(_prev: FormState, formData: FormData): 
   }
 
   if (parsed.data.phone) {
-    await admin.from("profiles").update({ phone: parsed.data.phone }).eq("id", created.user.id);
+    await admin.from("profiles").update({ phone: parsed.data.phone }).eq("id", created.userId);
   }
 
   revalidatePath("/dashboard/admin/staff");
-  redirect("/dashboard/admin/staff");
+  return { error: null, password: created.password, email: parsed.data.email };
 }

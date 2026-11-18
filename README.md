@@ -23,9 +23,10 @@ you've followed `docs/SETUP.md`.
   classes, and change status (active/withdrawn/graduated). Admission
   numbers are generated automatically and duplicate records are blocked.
 - **Staff management**: the Super Administrator creates staff accounts
-  (teacher, principal, bursar, admissions officer), which emails the staff
-  member an invite to set their own password. Staff numbers are generated
-  automatically.
+  (teacher, principal, bursar, admissions officer). A password is generated
+  automatically and shown to the admin to share with the staff member, who
+  is required to set their own password the first time they sign in. Staff
+  numbers are generated automatically.
 - **Classes, arms & subjects**: admins manage the class structure, add
   subjects, and assign teachers to classes/subjects — this is what powers
   "a teacher only sees their own class" everywhere else in the system.
