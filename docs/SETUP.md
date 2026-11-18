@@ -84,7 +84,7 @@ Supabase gives you a free PostgreSQL database plus user login/authentication
    step every page fails with "permission denied for table ..." even
    though every table's Row Level Security policy is correct).
 10. Repeat once more with `supabase/seed.sql` to add starter data (academic
-    session, terms, the Nursery/Primary 1–6 class list, subjects, assessment
+    session, terms, the Pre-School through Year Five class list, subjects, assessment
     components, grade bands and fee categories).
 
 Whenever a future phase adds a new `supabase/migrations/000N_*.sql` file,

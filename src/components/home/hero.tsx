@@ -1,18 +1,20 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-navy-950">
-      {/* Decorative glow — stands in for a photographic banner until real
-          school photography is supplied. */}
+      <Image
+        src="/images/gallery/pupils-cheering.jpg"
+        alt="BestRoyal Meridian pupils cheering together in the school compound"
+        fill
+        priority
+        className="object-cover opacity-50"
+      />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(60% 50% at 80% 10%, rgba(201,154,59,0.25) 0%, transparent 60%), radial-gradient(50% 40% at 10% 90%, rgba(47,87,144,0.45) 0%, transparent 60%)",
-        }}
+        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/80 to-navy-950/30"
       />
       <div
         aria-hidden
@@ -35,7 +37,7 @@ export function Hero() {
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy-100">
             BestRoyal Meridian Nursery &amp; Primary School nurtures every child
             through a caring, structured and academically rich environment —
-            from their very first day in Creche to graduation in Primary 6.
+            from their very first day in Pre-School to graduation in Year Five.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Button href="/admissions">Apply for Admission</Button>

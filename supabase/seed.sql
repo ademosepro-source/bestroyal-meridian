@@ -7,7 +7,7 @@ values (
   true,
   'BestRoyal Meridian Nursery & Primary School',
   'Soaring for Excellence',
-  'REPLACE ME — school address',
+  'Alagbado, Lagos State',
   'REPLACE ME — school phone number',
   'REPLACE ME — school email address'
 )
@@ -33,15 +33,15 @@ from public.academic_sessions where name = '2025/2026'
 on conflict (session_id, name) do nothing;
 
 insert into public.classes (name, level, order_index) values
-  ('Creche', 'nursery', 1),
-  ('Nursery 1', 'nursery', 2),
-  ('Nursery 2', 'nursery', 3),
-  ('Primary 1', 'primary', 4),
-  ('Primary 2', 'primary', 5),
-  ('Primary 3', 'primary', 6),
-  ('Primary 4', 'primary', 7),
-  ('Primary 5', 'primary', 8),
-  ('Primary 6', 'primary', 9)
+  ('Pre-School (Gold)', 'nursery', 1),
+  ('Pre-School (Silver)', 'nursery', 2),
+  ('Nursery One', 'nursery', 3),
+  ('Nursery Two', 'nursery', 4),
+  ('Year One', 'primary', 5),
+  ('Year Two', 'primary', 6),
+  ('Year Three', 'primary', 7),
+  ('Year Four', 'primary', 8),
+  ('Year Five', 'primary', 9)
 on conflict (name) do nothing;
 
 insert into public.class_arms (class_id, name)

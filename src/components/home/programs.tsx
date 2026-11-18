@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 const PROGRAMS = [
   {
     icon: Baby,
-    tag: "Creche · Nursery 1–2",
+    tag: "Pre-School · Nursery One–Two",
     title: "Nursery Education",
     description:
       "A warm, play-based introduction to learning that builds early literacy, numeracy, social skills and independence in a safe, caring setting.",
@@ -14,7 +14,7 @@ const PROGRAMS = [
   },
   {
     icon: BookOpen,
-    tag: "Primary 1–6",
+    tag: "Year One–Five",
     title: "Primary Education",
     description:
       "A structured, standards-based curriculum covering core subjects, creative arts and life skills — building strong academic foundations year on year.",

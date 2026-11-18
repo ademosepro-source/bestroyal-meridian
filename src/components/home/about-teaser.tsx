@@ -16,7 +16,7 @@ export function AboutTeaser() {
             <p className="mt-6 text-base leading-relaxed text-slate-600">
               BestRoyal Meridian Nursery &amp; Primary School is committed to
               providing a nurturing, safe and academically rigorous foundation
-              for every child in our care — from Creche through Primary 6.
+              for every child in our care — from Pre-School through Year Five.
               Guided by our motto, <em>Soaring for Excellence</em>, we combine
               structured learning with character development to prepare
               pupils for lifelong success.
