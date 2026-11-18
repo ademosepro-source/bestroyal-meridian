@@ -79,9 +79,13 @@ Supabase gives you a free PostgreSQL database plus user login/authentication
    structures, invoices and payments — after 0003).
 8. Repeat with `supabase/migrations/0005_communications.sql` (adds
    announcements, the school calendar and in-app notifications — after 0004).
-9. Repeat once more with `supabase/seed.sql` to add starter data (academic
-   session, terms, the Nursery/Primary 1–6 class list, subjects, assessment
-   components, grade bands and fee categories).
+9. Repeat with `supabase/migrations/0006_grants.sql` (grants the app's
+   database roles permission to use these tables at all — without this
+   step every page fails with "permission denied for table ..." even
+   though every table's Row Level Security policy is correct).
+10. Repeat once more with `supabase/seed.sql` to add starter data (academic
+    session, terms, the Nursery/Primary 1–6 class list, subjects, assessment
+    components, grade bands and fee categories).
 
 Whenever a future phase adds a new `supabase/migrations/000N_*.sql` file,
 run it the same way, in order, after the ones you've already run.

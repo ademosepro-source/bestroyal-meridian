@@ -42,6 +42,79 @@ create policy "assessment_components: admin write" on public.assessment_componen
   with check (public.current_role() in ('super_admin', 'principal'));
 
 -- ============================================================================
+-- Report cards — the approval workflow and the teacher/principal remarks.
+-- Created before exam_scores because an exam_scores policy below references
+-- it. Subject totals, grades, overall average and class position are
+-- computed on demand from exam_scores + grade_bands, not duplicated here.
+-- ============================================================================
+create type public.report_card_status as enum (
+  'draft',
+  'submitted',
+  'approved',
+  'published'
+);
+
+create table public.report_cards (
+  id uuid primary key default gen_random_uuid(),
+  student_id uuid not null references public.students (id) on delete cascade,
+  class_id uuid not null references public.classes (id) on delete cascade,
+  term_id uuid not null references public.terms (id) on delete cascade,
+  teacher_comment text,
+  principal_comment text,
+  promotion_status text, -- e.g. "Promoted to Primary 4", set by the class teacher
+  status public.report_card_status not null default 'draft',
+  submitted_by uuid references public.profiles (id) on delete set null,
+  submitted_at timestamptz,
+  approved_by uuid references public.profiles (id) on delete set null,
+  approved_at timestamptz,
+  published_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (student_id, term_id)
+);
+
+create trigger report_cards_set_updated_at
+  before update on public.report_cards
+  for each row execute function public.set_updated_at();
+
+alter table public.report_cards enable row level security;
+
+create policy "report_cards: admin principal manage" on public.report_cards
+  for all using (public.current_role() in ('super_admin', 'principal'))
+  with check (public.current_role() in ('super_admin', 'principal'));
+
+create policy "report_cards: class teacher manage while editable" on public.report_cards
+  for all using (
+    public.current_role() = 'teacher'
+    and status in ('draft', 'submitted')
+    and exists (
+      select 1 from public.teacher_class_assignments tca
+      where tca.teacher_id = auth.uid()
+        and tca.class_id = report_cards.class_id
+        and tca.is_class_teacher
+    )
+  )
+  with check (
+    public.current_role() = 'teacher'
+    and exists (
+      select 1 from public.teacher_class_assignments tca
+      where tca.teacher_id = auth.uid()
+        and tca.class_id = report_cards.class_id
+        and tca.is_class_teacher
+    )
+  );
+
+create policy "report_cards: parent reads published" on public.report_cards
+  for select using (
+    public.current_role() = 'parent'
+    and status = 'published'
+    and exists (
+      select 1 from public.parent_student ps
+      where ps.parent_id = auth.uid() and ps.student_id = report_cards.student_id
+    )
+  );
+
+-- ============================================================================
 -- Exam scores — one row per student, subject, term and assessment component
 -- ============================================================================
 create table public.exam_scores (
@@ -117,78 +190,6 @@ create policy "exam_scores: parent reads published" on public.exam_scores
       where rc.student_id = exam_scores.student_id
         and rc.term_id = exam_scores.term_id
         and rc.status = 'published'
-    )
-  );
-
--- ============================================================================
--- Report cards — the approval workflow and the teacher/principal remarks.
--- Subject totals, grades, overall average and class position are computed
--- on demand from exam_scores + grade_bands, not duplicated here.
--- ============================================================================
-create type public.report_card_status as enum (
-  'draft',
-  'submitted',
-  'approved',
-  'published'
-);
-
-create table public.report_cards (
-  id uuid primary key default gen_random_uuid(),
-  student_id uuid not null references public.students (id) on delete cascade,
-  class_id uuid not null references public.classes (id) on delete cascade,
-  term_id uuid not null references public.terms (id) on delete cascade,
-  teacher_comment text,
-  principal_comment text,
-  promotion_status text, -- e.g. "Promoted to Primary 4", set by the class teacher
-  status public.report_card_status not null default 'draft',
-  submitted_by uuid references public.profiles (id) on delete set null,
-  submitted_at timestamptz,
-  approved_by uuid references public.profiles (id) on delete set null,
-  approved_at timestamptz,
-  published_at timestamptz,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  unique (student_id, term_id)
-);
-
-create trigger report_cards_set_updated_at
-  before update on public.report_cards
-  for each row execute function public.set_updated_at();
-
-alter table public.report_cards enable row level security;
-
-create policy "report_cards: admin principal manage" on public.report_cards
-  for all using (public.current_role() in ('super_admin', 'principal'))
-  with check (public.current_role() in ('super_admin', 'principal'));
-
-create policy "report_cards: class teacher manage while editable" on public.report_cards
-  for all using (
-    public.current_role() = 'teacher'
-    and status in ('draft', 'submitted')
-    and exists (
-      select 1 from public.teacher_class_assignments tca
-      where tca.teacher_id = auth.uid()
-        and tca.class_id = report_cards.class_id
-        and tca.is_class_teacher
-    )
-  )
-  with check (
-    public.current_role() = 'teacher'
-    and exists (
-      select 1 from public.teacher_class_assignments tca
-      where tca.teacher_id = auth.uid()
-        and tca.class_id = report_cards.class_id
-        and tca.is_class_teacher
-    )
-  );
-
-create policy "report_cards: parent reads published" on public.report_cards
-  for select using (
-    public.current_role() = 'parent'
-    and status = 'published'
-    and exists (
-      select 1 from public.parent_student ps
-      where ps.parent_id = auth.uid() and ps.student_id = report_cards.student_id
     )
   );
 
