@@ -31,6 +31,10 @@ don't see.
   to a different class, or change their **status** (active / withdrawn /
   graduated).
 - Use the search box and the class/status filters to find someone quickly.
+- **Delete** permanently removes a student's record, along with their
+  attendance, scores, report cards and invoices — confirm first, and it
+  can't be undone. If they've simply left or graduated, use **status**
+  instead so their history is kept.
 
 ### Staff (`Staff`)
 
@@ -43,6 +47,9 @@ don't see.
   Officer) — this controls exactly what they can see and do, and can't be
   changed from this screen afterward (ask a developer if a role needs to
   change).
+- **Delete** permanently removes a staff member's account and login —
+  confirm first, and it can't be undone. You can't delete your own
+  account this way.
 
 ### Classes & Subjects (`Classes & Subjects`)
 

@@ -53,3 +53,24 @@ export async function createStaffAccount(_prev: FormState, formData: FormData): 
   revalidatePath("/dashboard/admin/staff");
   return { error: null, password: created.password, email: parsed.data.email };
 }
+
+export async function deleteStaffAccount(staffId: string) {
+  // Only the Super Administrator deletes staff accounts.
+  const profile = await requireRole("super_admin");
+
+  if (profile.id === staffId) {
+    throw new Error("You cannot delete your own account.");
+  }
+
+  const admin = createAdminClient();
+  // Deleting the auth user cascades to the profile row, which cascades to the
+  // staff row and every record that references it (class/subject assignments,
+  // report cards submitted, etc. — see the "on delete" rules in the schema).
+  const { error } = await admin.auth.admin.deleteUser(staffId);
+
+  if (error) {
+    throw new Error("Could not delete this staff account. Please try again.");
+  }
+
+  revalidatePath("/dashboard/admin/staff");
+}

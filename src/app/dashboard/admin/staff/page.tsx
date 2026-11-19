@@ -3,9 +3,13 @@ import { Plus, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ROLE_LABELS } from "@/lib/auth/roles";
+import { getCurrentProfile } from "@/lib/auth/get-current-user";
+import { deleteStaffAccount } from "@/app/dashboard/admin/staff/actions";
+import { ConfirmDeleteButton } from "@/components/dashboard/confirm-delete-button";
 
 export default async function StaffPage() {
   const supabase = await createClient();
+  const currentProfile = await getCurrentProfile();
 
   const { data: staff } = await supabase
     .from("staff")
@@ -51,11 +55,13 @@ export default async function StaffPage() {
                 <th className="px-5 py-3">Role</th>
                 <th className="px-5 py-3">Position</th>
                 <th className="px-5 py-3">Email</th>
+                <th className="px-5 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-navy-900/5">
               {staff.map((member) => {
                 const profile = profileById.get(member.id);
+                const isSelf = currentProfile?.id === member.id;
                 return (
                   <tr key={member.id} className="hover:bg-navy-50/40">
                     <td className="px-5 py-3 font-medium text-navy-900">{profile?.full_name}</td>
@@ -63,6 +69,15 @@ export default async function StaffPage() {
                     <td className="px-5 py-3 text-slate-600">{profile ? ROLE_LABELS[profile.role] : "—"}</td>
                     <td className="px-5 py-3 text-slate-600">{member.position}</td>
                     <td className="px-5 py-3 text-slate-600">{profile?.email}</td>
+                    <td className="px-5 py-3 text-right">
+                      {!isSelf && (
+                        <form action={deleteStaffAccount.bind(null, member.id)}>
+                          <ConfirmDeleteButton
+                            confirmMessage={`Delete ${profile?.full_name ?? "this staff member"}'s account? This cannot be undone.`}
+                          />
+                        </form>
+                      )}
+                    </td>
                   </tr>
                 );
               })}

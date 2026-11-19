@@ -3,6 +3,9 @@ import { Plus, Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { StudentStatus } from "@/types/database";
+import { getCurrentProfile } from "@/lib/auth/get-current-user";
+import { deleteStudent } from "@/app/dashboard/admin/students/actions";
+import { ConfirmDeleteButton } from "@/components/dashboard/confirm-delete-button";
 
 const VALID_STATUSES: StudentStatus[] = ["active", "withdrawn", "graduated"];
 
@@ -13,6 +16,8 @@ export default async function StudentsPage({
 }) {
   const { q, class_id, status } = await searchParams;
   const supabase = await createClient();
+  const currentProfile = await getCurrentProfile();
+  const canDelete = currentProfile?.role === "super_admin";
 
   const { data: classes } = await supabase.from("classes").select("id, name").order("order_index");
 
@@ -129,9 +134,18 @@ export default async function StudentsPage({
                     </span>
                   </td>
                   <td className="px-5 py-3 text-right">
-                    <Link href={`/dashboard/admin/students/${s.id}`} className="text-sm font-semibold text-navy-700 hover:text-navy-900">
-                      View / Edit
-                    </Link>
+                    <div className="flex items-center justify-end gap-3">
+                      <Link href={`/dashboard/admin/students/${s.id}`} className="text-sm font-semibold text-navy-700 hover:text-navy-900">
+                        View / Edit
+                      </Link>
+                      {canDelete && (
+                        <form action={deleteStudent.bind(null, s.id)}>
+                          <ConfirmDeleteButton
+                            confirmMessage={`Delete ${s.first_name} ${s.surname}'s record? This removes their attendance, scores, report cards and invoices too, and cannot be undone.`}
+                          />
+                        </form>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

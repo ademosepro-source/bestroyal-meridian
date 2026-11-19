@@ -129,3 +129,20 @@ export async function setStudentStatus(studentId: string, status: "active" | "wi
   revalidatePath("/dashboard/admin/students");
   revalidatePath(`/dashboard/admin/students/${studentId}`);
 }
+
+export async function deleteStudent(studentId: string) {
+  // Only the Super Administrator deletes a student's record.
+  await requireRole("super_admin");
+
+  const supabase = await createClient();
+  // Cascades to this student's attendance, exam scores, report cards,
+  // invoices/payments and parent links (see the "on delete" rules in the schema).
+  const { error } = await supabase.from("students").delete().eq("id", studentId);
+
+  if (error) {
+    throw new Error("Could not delete this student's record. Please try again.");
+  }
+
+  revalidatePath("/dashboard/admin/students");
+  redirect("/dashboard/admin/students");
+}
