@@ -51,12 +51,15 @@ you've followed `docs/SETUP.md`.
   class positions are computed live from entered scores — never stored
   redundantly, so they can never go stale.
 - **Report card workflow**: Teacher entry → class teacher submits with
-  comments → Principal approves → Super Administrator publishes → parent
-  can view. Every step is logged to the audit trail.
-- **Printable report card**: a dedicated page matching the required layout
-  (crest, pupil details, subject table, attendance summary, comments,
-  signature lines) with a "Print / Save as PDF" button — uses the browser's
-  own print-to-PDF, so no extra software or accounts are needed.
+  comments and Character Development & Psychomotor Skills ratings →
+  Principal approves → Super Administrator publishes → parent can view.
+  Every step is logged to the audit trail.
+- **Printable report card**: a redesigned, letterhead-style page (crest,
+  school address and motto, pupil details, a subject table broken down
+  by assessment component, attendance, character/psychomotor skill
+  ratings, comments, signature lines) with a "Print / Save as PDF"
+  button — uses the browser's own print-to-PDF, so no extra software or
+  accounts are needed.
 
 **Phase 4 — Financial Management**
 - **Fee configuration**: fee categories (tuition, registration, development

@@ -376,6 +376,8 @@ export interface Database {
           teacher_comment: string | null;
           principal_comment: string | null;
           promotion_status: string | null;
+          character_ratings: Record<string, number>;
+          psychomotor_ratings: Record<string, number>;
           status: ReportCardStatus;
           submitted_by: string | null;
           submitted_at: string | null;

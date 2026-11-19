@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { FileText } from "lucide-react";
 import { getClassTermSummaries } from "@/lib/academics/report-card-data";
 import { ordinal } from "@/lib/academics/grading";
+import { CHARACTER_TRAITS, PSYCHOMOTOR_SKILLS, RATING_SCALE } from "@/lib/academics/skills";
 import { submitReportCard } from "@/app/dashboard/teacher/report-cards/actions";
 
 export default async function TeacherReportCardsPage() {
@@ -39,7 +40,11 @@ export default async function TeacherReportCardsPage() {
       .eq("class_id", classTeacherOf.class_id)
       .eq("status", "active")
       .order("surname"),
-    supabase.from("report_cards").select("student_id, status, teacher_comment, promotion_status").eq("class_id", classTeacherOf.class_id).eq("term_id", currentTerm.id),
+    supabase
+      .from("report_cards")
+      .select("student_id, status, teacher_comment, promotion_status, character_ratings, psychomotor_ratings")
+      .eq("class_id", classTeacherOf.class_id)
+      .eq("term_id", currentTerm.id),
   ]);
 
   const summaries = await getClassTermSummaries(supabase, classTeacherOf.class_id, currentTerm.id);
@@ -95,6 +100,49 @@ export default async function TeacherReportCardsPage() {
                     disabled={locked}
                     className="w-full rounded-lg border border-navy-900/15 px-3 py-2 text-sm outline-none focus:border-navy-500 disabled:bg-slate-50"
                   />
+
+                  <details className="rounded-lg border border-navy-900/10 px-3 py-2">
+                    <summary className="cursor-pointer text-xs font-semibold text-navy-800">
+                      Character Development &amp; Psychomotor Skills
+                    </summary>
+                    <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
+                      {CHARACTER_TRAITS.map((trait) => (
+                        <label key={trait.key} className="text-xs text-slate-600">
+                          {trait.label}
+                          <select
+                            name={`char_${trait.key}`}
+                            disabled={locked}
+                            defaultValue={card?.character_ratings?.[trait.key] ?? 3}
+                            className="mt-1 block w-full rounded-md border border-navy-900/15 px-2 py-1 text-xs outline-none focus:border-navy-500 disabled:bg-slate-50"
+                          >
+                            {RATING_SCALE.map((r) => (
+                              <option key={r.value} value={r.value}>
+                                {r.value} — {r.label}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      ))}
+                      {PSYCHOMOTOR_SKILLS.map((skill) => (
+                        <label key={skill.key} className="text-xs text-slate-600">
+                          {skill.label}
+                          <select
+                            name={`psych_${skill.key}`}
+                            disabled={locked}
+                            defaultValue={card?.psychomotor_ratings?.[skill.key] ?? 3}
+                            className="mt-1 block w-full rounded-md border border-navy-900/15 px-2 py-1 text-xs outline-none focus:border-navy-500 disabled:bg-slate-50"
+                          >
+                            {RATING_SCALE.map((r) => (
+                              <option key={r.value} value={r.value}>
+                                {r.value} — {r.label}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      ))}
+                    </div>
+                  </details>
+
                   <button
                     type="submit"
                     disabled={locked}

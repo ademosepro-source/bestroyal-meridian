@@ -167,9 +167,11 @@ they're published.
   only enter scores for subjects you actually teach.
 - **Report Cards** (only if you're the *class teacher*, not just a
   subject teacher): see every student's computed average and position,
-  add your comment and the promotion status, then **Submit for
-  Approval**. Once a Principal approves and it's published, you can no
-  longer edit it from here.
+  add your comment and the promotion status, rate each pupil's
+  **Character Development & Psychomotor Skills** (Punctuality,
+  Neatness, Handwriting, Sports, and more — on a 1 to 5 scale), then
+  **Submit for Approval**. Once a Principal approves and it's
+  published, you can no longer edit it from here.
 
 ---
 

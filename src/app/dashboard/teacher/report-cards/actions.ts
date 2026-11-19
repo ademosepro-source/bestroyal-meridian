@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile } from "@/lib/auth/get-current-user";
+import { CHARACTER_TRAITS, PSYCHOMOTOR_SKILLS } from "@/lib/academics/skills";
 
 export async function submitReportCard(
   studentId: string,
@@ -16,6 +17,18 @@ export async function submitReportCard(
   const teacherComment = String(formData.get("teacher_comment") ?? "").trim() || null;
   const promotionStatus = String(formData.get("promotion_status") ?? "").trim() || null;
 
+  const characterRatings: Record<string, number> = {};
+  for (const trait of CHARACTER_TRAITS) {
+    const value = Number(formData.get(`char_${trait.key}`));
+    if (value >= 1 && value <= 5) characterRatings[trait.key] = value;
+  }
+
+  const psychomotorRatings: Record<string, number> = {};
+  for (const skill of PSYCHOMOTOR_SKILLS) {
+    const value = Number(formData.get(`psych_${skill.key}`));
+    if (value >= 1 && value <= 5) psychomotorRatings[skill.key] = value;
+  }
+
   const supabase = await createClient();
   await supabase.from("report_cards").upsert(
     {
@@ -24,6 +37,8 @@ export async function submitReportCard(
       term_id: termId,
       teacher_comment: teacherComment,
       promotion_status: promotionStatus,
+      character_ratings: characterRatings,
+      psychomotor_ratings: psychomotorRatings,
       status: "submitted",
       submitted_by: profile.id,
       submitted_at: new Date().toISOString(),
