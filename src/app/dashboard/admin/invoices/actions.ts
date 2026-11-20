@@ -7,7 +7,7 @@ import { getParentIdsForStudent, notify } from "@/lib/notifications/create";
 import { formatNaira, outstandingBalance } from "@/lib/finance/invoices";
 
 async function assertFinance() {
-  return requireRole("super_admin", "bursar");
+  return requireRole("super_admin", "principal", "bursar");
 }
 
 async function generateForStudent(

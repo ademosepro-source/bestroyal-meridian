@@ -6,7 +6,7 @@ import { requireRole } from "@/lib/auth/require-role";
 import { feeCategorySchema, feeStructureSchema } from "@/lib/validations/fees";
 
 async function assertFinance() {
-  await requireRole("super_admin", "bursar");
+  await requireRole("super_admin", "principal", "bursar");
 }
 
 export async function createFeeCategory(formData: FormData) {

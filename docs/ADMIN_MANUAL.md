@@ -147,11 +147,16 @@ don't see.
 
 ## Principal / Head Teacher
 
-You see Students, Classes & Subjects, Attendance, Grading Setup, Report
-Cards, Announcements, School Calendar, and Reports — the same as the
-Super Administrator for academic matters, but **not** Staff, Fee Setup,
-or Invoices & Payments. Financial administration stays with the Bursar
-and Super Administrator by design.
+You see everything the Super Administrator does for academic matters —
+Students, Classes & Subjects, Attendance, Grading Setup, Report Cards,
+Announcements, School Calendar, and Reports — plus full **Admissions**
+(review, accept/reject applications, enrol accepted applicants) and full
+**Fee Setup** and **Invoices & Payments** (generate invoices, record and
+verify payments, send fee reminders), described under Super Administrator
+and Accountant / Bursar above. The only things that stay Super
+Administrator-only are **Staff** accounts and **reversing a payment** —
+so a mistake in a payment record can't be quietly undone by whoever
+entered it.
 
 Your main extra responsibility is **approving report cards** before
 they're published.

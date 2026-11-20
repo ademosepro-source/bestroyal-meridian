@@ -10,7 +10,7 @@ import { setFlashPassword } from "@/lib/auth/flash-password";
 import type { ApplicationStatus } from "@/types/database";
 
 async function assertAdmissions() {
-  return requireRole("super_admin", "admissions_officer");
+  return requireRole("super_admin", "principal", "admissions_officer");
 }
 
 export async function setApplicationStatus(applicationId: string, status: ApplicationStatus, notes?: string) {

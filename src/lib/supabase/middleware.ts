@@ -56,9 +56,11 @@ export async function updateSession(request: NextRequest) {
     }
 
     const role = user.app_metadata?.role as string | undefined;
-    const matchedSection = Object.keys(ROLE_ACCESS).find((section) =>
-      pathname.startsWith(section),
-    );
+    // Longest matching prefix wins, so a specific sub-path (e.g.
+    // "/dashboard/admin/fees") overrides the bare "/dashboard/admin" entry.
+    const matchedSection = Object.keys(ROLE_ACCESS)
+      .filter((section) => pathname.startsWith(section))
+      .sort((a, b) => b.length - a.length)[0];
 
     if (matchedSection && (!isRole(role) || !ROLE_ACCESS[matchedSection].includes(role))) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
