@@ -57,9 +57,15 @@ export default async function ParentDashboardPage() {
           .select("student_id, term_id")
           .in("student_id", studentIds)
           .eq("status", "published")
+          .order("published_at", { ascending: false })
       : { data: [] };
 
-  const reportCardByStudent = new Map((publishedReportCards ?? []).map((r) => [r.student_id, r.term_id]));
+  // Most recently published wins per child, in case more than one term's
+  // report card has ever been published for them.
+  const reportCardByStudent = new Map<string, string>();
+  for (const r of publishedReportCards ?? []) {
+    if (!reportCardByStudent.has(r.student_id)) reportCardByStudent.set(r.student_id, r.term_id);
+  }
 
   const { data: invoices } =
     studentIds.length > 0

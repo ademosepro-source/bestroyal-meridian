@@ -104,6 +104,22 @@ export default async function ParentFeesPage({
                     </ul>
                   </div>
                 )}
+
+                {invPayments.filter((p) => p.status === "pending").length > 0 && (
+                  <div className="mt-4 border-t border-navy-900/5 pt-4">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Awaiting Confirmation</p>
+                    <ul className="mt-2 space-y-1 text-sm">
+                      {invPayments.filter((p) => p.status === "pending").map((p) => (
+                        <li key={p.id} className="flex items-center justify-between text-amber-700">
+                          <span>{formatNaira(Number(p.amount))} · {p.method === "paystack" ? "Online payment" : "Bank transfer"} · {new Date(p.created_at).toLocaleDateString()}</span>
+                          <span className="text-xs font-semibold">
+                            {p.method === "paystack" ? "Awaiting payment" : "Awaiting verification"}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             );
           })}
